@@ -1,6 +1,10 @@
-import fetch from 'isomorphic-fetch';
+import axios from 'axios';
 import { routerActions } from 'react-router-redux'
 import { baseURL } from '../config'
+
+const client = axios.create({
+    mode: 'cros'
+});
 
 /* ActionType Constants */
 const LOGIN_REQUEST = 'LOGIN_REQUEST';
@@ -24,11 +28,17 @@ loginActions.login = (userId) => (dispatch) => {
     dispatch(loginActions.loginRequest(userId));
 
     // Thunkミドルウェアから呼び出された関数は、dispatchメソッドのreturn値として値をreturnできる。
+    /*
     return fetch(`${baseURL}/v1.0/users/${userId}`, {
         mode: 'cros',
     })
     .then(response => {
         return response.json()
+    })
+    */
+    return client.get(`${baseURL}/v1.0/users/${userId}`)
+    .then(response => {
+        return response.data;
     })
     .then(json => {
         // 何度でもdispatchできる。

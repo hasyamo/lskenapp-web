@@ -1,7 +1,14 @@
-import fetch from 'isomorphic-fetch';
+//import fetch from 'isomorphic-fetch';
+import axios from 'axios';
 //import { routerActions } from 'react-router-redux'
 import { baseURL } from '../config'
 
+const client = axios.create({
+    mode: 'cros',
+    headers: {
+        Authorization : 'token',
+    }
+});
 /* ActionType Constants */
 const GET_MESSAGES_REQUEST = 'GET_MESSAGES_REQUEST';
 const GET_MESSAGES_FAILURE = 'GET_MESSAGES_FAILURE';
@@ -30,6 +37,7 @@ export const messagesActions = {
 messagesActions.getMessages = () => (dispatch) => {
     dispatch(messagesActions.getMessagesRequest());
     const url = `${baseURL}/v1.1/messages/search`;
+    /*
     return fetch(url, {
         method: 'GET',
         mode: 'cros',
@@ -37,8 +45,10 @@ messagesActions.getMessages = () => (dispatch) => {
             Authorization : 'token',
         }
     })
+    */
+    return client.get(url)
     .then(response => {
-        return response.json();
+        return response.data;
     })
     .then(json => {
         dispatch(messagesActions.getMessagesSuccess(json));
@@ -51,6 +61,7 @@ messagesActions.getMessages = () => (dispatch) => {
 messagesActions.postMessage = (message, onAfterCallback) => (dispatch) => {
     dispatch(messagesActions.postMessageRequest());
     const url = `${baseURL}/v1.1/messages`;
+    /*
     return fetch(url, {
         method: 'POST',
         mode: 'cros',
@@ -59,6 +70,14 @@ messagesActions.postMessage = (message, onAfterCallback) => (dispatch) => {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(message)
+    })
+    */
+    return client.post(url,message, {
+        mode: 'cros',
+        headers: {
+            Authorization : 'token',
+            'Content-Type': 'application/json'
+        },
     })
     .then(response => {
         dispatch(messagesActions.postMessageSuccess());
@@ -74,6 +93,7 @@ messagesActions.postMessage = (message, onAfterCallback) => (dispatch) => {
 messagesActions.getStamps = (message) => (dispatch) => {
     dispatch(messagesActions.getStampsRequest());
     const url = `${baseURL}/v1.0/stamps`
+    /*
     return fetch(url, {
         method: 'GET',
         mode: 'cros',
@@ -81,8 +101,10 @@ messagesActions.getStamps = (message) => (dispatch) => {
             Authorization : 'token',
         }
     })
+    */
+    return client.get(url)
     .then(response => {
-        return response.json();
+        return response.data;
     })
     .then(json => {
         dispatch(messagesActions.getStampsSuccess(json));

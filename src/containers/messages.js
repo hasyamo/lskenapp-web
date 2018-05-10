@@ -129,6 +129,9 @@ class Messages extends Component {
             });
         }
     }
+    handleClickGroup = () => event => {
+        this.props.doGetMessages();
+    };
 
     handleChange = name => event => {
         let val = event.target.value;
@@ -175,11 +178,11 @@ class Messages extends Component {
                 </div>
                 <Divider />
                 <List>
-                    <ListItem button>
+                    <ListItem button onClick={this.handleClickGroup()}>
                         <ListItemIcon>
                             <ChatIcon />
                         </ListItemIcon>
-                        <ListItemText primary="グループ名(仮)" />
+                        <ListItemText primary="LS研WebAPI分科会" />
                     </ListItem>
                 </List>
             </Drawer>
@@ -308,7 +311,7 @@ export const ConnectedMessages = connect(
             doGetStamps: () => {
                 dispatch(messagesActions.getStamps());
             },
-            doGetMessages: (onAfterCallback) => {
+            doGetMessages: () => {
                 dispatch(messagesActions.getMessages());
             },
             onPostMessage: (type, messageDetail) => {
